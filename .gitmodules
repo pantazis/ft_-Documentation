@@ -1,0 +1,3 @@
+[submodule "user_data/documentation"]
+	path = user_data/documentation
+	url = https://github.com/pantazis/ft_-Documentation.git
