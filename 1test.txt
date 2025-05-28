@@ -1,0 +1,31 @@
+cd trading-bots/panagiotis_bots/ft_userdata/
+
+sudo docker stop $(sudo docker ps -q)
+
+sudo docker compose down
+
+sudo docker compose -p bbrrsistrategy2 up -d
+
+
+git fetch --all
+
+git checkout  bbr-rsi-strategy-live1-panagiotis    
+
+sudo docker compose run --rm freqtrade trade --strategy BBRRSIStrategy2 --config user_data/config.json 
+
+# Stop all running containers
+sudo docker stop $(sudo docker ps -q)
+
+# Verify containers are stopped
+sudo docker ps -a
+
+# Remove all containers
+sudo docker rm $(sudo docker ps -a -q)
+
+# Verify all containers are gone
+sudo docker ps -a
+
+
+
+To show the logs for your running FreqTrade container (b5d7e98b76fc), use:
+sudo docker logs -f b5d7e98b76fc
