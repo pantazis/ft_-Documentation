@@ -10,7 +10,7 @@ tickers = exchange.fetch_tickers()
 
 # 3) Filter for USDT-quoted markets and collect their 24h quoteVolume
 usdt_pairs = [
-    (symbol, data.get('quoteVolume', 0.0))
+    (symbol, data.get('MarketCapPairList', 0.0))
     for symbol, data in tickers.items()
     if symbol.endswith('/USDC')
 ]
