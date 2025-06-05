@@ -1,0 +1,7 @@
+docker compose run --rm freqtrade `
+   hyperopt --strategy BBRRSIStrategy2 `
+            --hyperopt-loss CustomSharpeHyperOptLoss2 `
+            --spaces buy roi stoploss  `
+           --timerange 20250504- `
+          --epochs 150 `
+          --min-trades 3
