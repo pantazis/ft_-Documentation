@@ -1,35 +1,27 @@
 import ccxt
 
-# 1) Instantiate Binance with rate limit
+# 1) Instantiate Binance
 exchange = ccxt.binance({
     'enableRateLimit': True,
 })
 
-# 2) Fetch all markets and filter for spot pairs quoted in USDC
-markets = exchange.fetch_markets()
-spot_symbols = {
-    market["symbol"] 
-    for market in markets 
-    if market["type"] == "spot" and market["quote"] == "USDC"
-}
-
-# 3) Fetch all tickers (latest 24h data)
+# 2) Fetch all tickers (latest 24h data)
 tickers = exchange.fetch_tickers()
 
-# 4) Filter for spot pairs (using our filtered symbols) and collect their 24h volume
-spot_pairs = [
+# 3) Filter for USDT-quoted markets and collect their 24h quoteVolume
+usdt_pairs = [
     (symbol, data.get('MarketCapPairList', 0.0))
     for symbol, data in tickers.items()
-    if symbol in spot_symbols
+    if symbol.endswith('/USDC')
 ]
 
-# 5) Sort descending by the volume value, take top 100
-top100 = sorted(spot_pairs, key=lambda x: x[1], reverse=True)[:50]
+# 4) Sort descending by volume, take top 100
+top100 = sorted(usdt_pairs, key=lambda x: x[1], reverse=True)[:100]
 
-# 6) Extract just the symbols
+# 5) Extract just the symbols
 top100_symbols = [symbol for symbol, vol in top100]
 
-# 7) Print or save the top 100 symbols
+# 6) Print or save
 print(top100_symbols)
 
 
