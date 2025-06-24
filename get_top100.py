@@ -10,13 +10,13 @@ tickers = exchange.fetch_tickers()
 
 # 3) Filter for USDT-quoted markets and collect their 24h quoteVolume
 usdt_pairs = [
-    (symbol, data.get('MarketCapPairList', 0.0))
+    (symbol, data.get('quoteVolume', 0.0))
     for symbol, data in tickers.items()
     if symbol.endswith('/USDC')
 ]
 
 # 4) Sort descending by volume, take top 100
-top100 = sorted(usdt_pairs, key=lambda x: x[1], reverse=True)[:100]
+top100 = sorted(usdt_pairs, key=lambda x: x[1], reverse=True)[:30]
 
 # 5) Extract just the symbols
 top100_symbols = [symbol for symbol, vol in top100]
