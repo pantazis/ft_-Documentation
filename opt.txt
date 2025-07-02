@@ -1,12 +1,23 @@
-                                        
-    docker compose run --rm freqtrade `
-    hyperopt --strategy BBRRSIStrategy2 `
-           --hyperopt-loss ProfitStdRatioHyperOptLoss `
-             --spaces buy roi stoploss `
-            --timerange 20250504- `
-            --epochs 1500 `
-            --min-trades 20
+docker compose run --rm freqtrade hyperopt `
+>>   --strategy DonchianLongHyperOptTS `
+>>   --hyperopt-loss ProfitStdRatioHyperOptLoss `
+>>   --spaces buy trailing stoploss roi  `
+>>   --timerange 20250504- --epochs 1  --min-trades 10  --job-workers 1
 
 
-            docker compose run --rm freqtrade plot-profit --strategy BBRRSIStrategy2 --timeframe 15m --timerange 20250504-
+docker-compose run --rm freqtrade backtesting `
+  --strategy DonchianLongHyperOptTS `
+  --config user_data/config.json  `
+  --timerange 20250504-
+
+  docker compose run --rm freqtrade plot-profit --strategy DonchianLongHyperOptTS --timeframe 15m --timerange 20250504-
+  
+
+
+  
+
+
+
+
+docker compose run --rm freqtrade plot-profit --strategy DonchianLongMidTP --timeframe 15m --timerange 20250504-
        
