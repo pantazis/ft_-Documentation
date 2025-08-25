@@ -11,7 +11,7 @@ git fetch --all
 
 git checkout  bbr-rsi-strategy-live1-panagiotis    
 
-sudo docker compose run --rm freqtrade trade --strategy BBRRSIStrategy2 --config user_data/config.json 
+sudo docker compose run --rm freqtrade trade --strategy DonchianEmaBreakoutStrategy --config user_data/config.json 
 
 # Stop all running containers
 sudo docker stop $(sudo docker ps -q)

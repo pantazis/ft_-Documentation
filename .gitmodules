@@ -1,3 +1,8 @@
 [submodule "user_data/documentation"]
 	path = user_data/documentation
 	url = https://github.com/pantazis/ft_-Documentation.git
+
+# Example of how it would look with a hyperopts submodule:
+# [submodule "user_data/hyperopts/ft_hyperopts"]
+# 	path = user_data/hyperopts/ft_hyperopts
+# 	url = https://github.com/pantazis/ft_hyperopts.git

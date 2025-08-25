@@ -1,23 +1,10 @@
-docker compose run --rm freqtrade hyperopt `
->>   --strategy DonchianLongHyperOptTS `
->>   --hyperopt-loss ProfitStdRatioHyperOptLoss `
->>   --spaces buy trailing stoploss roi  `
->>   --timerange 20250504- --epochs 1  --min-trades 10  --job-workers 1
+docker-compose run --rm freqtrade hyperopt-show --best -n -1 --print-json --logfile user_data/logs/best.log
 
 
-docker-compose run --rm freqtrade backtesting `
-  --strategy DonchianLongHyperOptTS `
-  --config user_data/config.json  `
-  --timerange 20250504-
-
-  docker compose run --rm freqtrade plot-profit --strategy DonchianLongHyperOptTS --timeframe 15m --timerange 20250504-
-  
+ ddocker-compose run --rm freqtrade hyperopt --strategy DonchianEmaBreakoutStrategy --spaces  sell stoploss   --epochs 10  --timerange 20250504- --hyperopt-loss ProfitSharpeTimeHyperOptLossDuration  -j 1      --logfile user_data/logs/hiperopt.log
 
 
-  
+ docker-compose run --rm freqtrade backtesting --strategy DonchianEmaBreakoutStrategy --timerange 20250504- --logfile user_data/logs/backtest.log
 
 
-
-
-docker compose run --rm freqtrade plot-profit --strategy DonchianLongMidTP --timeframe 15m --timerange 20250504-
-       
+ docker compose run --rm freqtrade plot-profit --strategy DonchianEmaBreakoutStrategy --timeframe 15m --timerange 20250504-
