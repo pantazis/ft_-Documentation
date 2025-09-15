@@ -1,7 +1,7 @@
 docker-compose run --rm freqtrade hyperopt-show --best -n -1 --print-json --logfile user_data/logs/best.log
 
 
- ddocker-compose run --rm freqtrade hyperopt --strategy DonchianEmaBreakoutStrategy --spaces  sell stoploss   --epochs 10  --timerange 20250504- --hyperopt-loss ProfitSharpeTimeHyperOptLossDuration  -j 1      --logfile user_data/logs/hiperopt.log
+ docker-compose run --rm freqtrade hyperopt --strategy DonchianEmaBreakoutStrategy --spaces  sell stoploss   --epochs 10  --timerange 20250504- --hyperopt-loss ProfitSharpeTimeHyperOptLossDuration  -j 1      --logfile user_data/logs/hiperopt.log
 
 
  docker-compose run --rm freqtrade backtesting --strategy DonchianEmaBreakoutStrategy --timerange 20250504- --logfile user_data/logs/backtest.log
