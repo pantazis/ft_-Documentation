@@ -11,7 +11,8 @@ git fetch --all
 
 git checkout  bbr-rsi-strategy-live1-panagiotis    
 
-sudo docker compose run --rm freqtrade trade --strategy DonchianEmaBreakoutStrategy --config user_data/config.json 
+# Run the trade command detached so it continues after closing the shell
+sudo docker compose run -d --rm freqtrade trade --strategy DonchianEmaBreakoutStrategy --config user_data/config.json 
 
 # Stop all running containers
 sudo docker stop $(sudo docker ps -q)
@@ -28,4 +29,4 @@ sudo docker ps -a
 
 
 To show the logs for your running FreqTrade container (b5d7e98b76fc), use:
-sudo docker logs -f b5d7e98b76fc
+sudo docker logs -f bd132bcd30bd
