@@ -29,4 +29,4 @@ sudo docker ps -a
 
 
 To show the logs for your running FreqTrade container (b5d7e98b76fc), use:
-sudo docker logs -f 8733d051c39d 
+sudo docker logs -f 2f9fbc4a88dae472b65b4effd63d9dfce46ad8e9fc128597312226436592203d
