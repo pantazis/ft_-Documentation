@@ -1,10 +1,84 @@
 docker-compose run --rm freqtrade hyperopt-show --best -n -1 --print-json --logfile user_data/logs/best.log
 
 
- docker-compose run --rm freqtrade hyperopt --strategy DonchianEmaBreakoutStrategy --spaces  sell stoploss   --epochs 1000  --timerange 20250504- --hyperopt-loss ProfitSharpeTimeHyperOptLossDuration  -j 1      --logfile user_data/logs/hiperopt.log
+ docker-compose run --rm freqtrade hyperopt --strategy DonchianEmaBreakoutStrategy_pairconfig  --spaces   buy sell   --epochs 1000  --timerange 20250504- --hyperopt-loss DailyProfitSharpeR2EvenLoss  -j 1      --logfile user_data/logs/hiperopt.log
 
 
- docker-compose run --rm freqtrade backtesting --strategy DonchianEmaBreakoutStrategy --timerange 20250504- --logfile user_data/logs/backtest.log
+ docker-compose run --rm freqtrade backtesting --strategy DonchianEmaBreakoutStrategy_pairconfig --timerange  20250504-20251024 --logfile user_data/logs/backtest.log
 
 
- docker compose run --rm freqtrade plot-profit --strategy DonchianEmaBreakoutStrategy --timeframe 15m --timerange 20250504-
+  C:/Users/pvast/Documents/freqtrade/ft_userdata/.venv/Scripts/python.exe user_data/documentation/ft_backtest_charts.py --use-last --results-dir user_data/backtest_results --outdir user_data/plot/charts_last
+
+  RUN python user_data/documentation/backtest_streaks_pipeline.py
+
+  //////////////////////
+ $pairs = @(
+"BNB/USDC	",
+"ETH/USDC	",
+"LTC/USDC",
+"NEO/USDC" 
+)
+
+$summaryCsv = "user_data/hyperopt_results/metrics/summary.csv"
+if (-not (Test-Path $summaryCsv)) {
+  New-Item -ItemType Directory -Force -Path (Split-Path $summaryCsv) | Out-Null
+  "pair,trades,profit_total,profit_total_abs,sharpe,run_id" | Out-File -Encoding utf8 $summaryCsv
+}
+
+foreach ($pair in $pairs) {
+  Write-Host "=== Running hyperopt for $pair ==="
+  $log = "user_data/logs/hyperopt_$($pair -replace '/','_').log"
+
+  docker compose run --rm -e FT_HYPEROPT_ROTATE_PAIR="$pair" freqtrade `
+    hyperopt `
+      --strategy DonchianEmaBreakoutStrategy_pairconfig `
+      --spaces buy sell `
+      --epochs 100 `
+      --timerange 20250504- `
+      --hyperopt-loss DailyProfitR2_DD_TimeLoss `
+      -j 1 `
+      --logfile $log
+
+  # Export metrics for the latest hyperopt run
+  $lastJson = Get-Content user_data/hyperopt_results/.last_result.json | ConvertFrom-Json
+  $latest = $lastJson.latest_hyperopt
+  if (-not $latest) {
+    Write-Warning "No latest_hyperopt file found. Skipping export for $pair."
+    continue
+  }
+
+  python user_data/documentation/export_hyperopt_pair_metrics.py --fthypt $latest | Out-Null
+
+  # Copy per-pair file to a stable location and append to summary
+  $runId = ($latest -replace '\.fthypt$','')
+  $safe = ($pair -replace '/','_')
+  $pairFile = "user_data/hyperopt_results/metrics/$runId/$safe.txt"
+  $destDir = "user_data/hyperopt_results/metrics/by_pair"
+  New-Item -ItemType Directory -Force -Path $destDir | Out-Null
+  if (Test-Path $pairFile) {
+    Copy-Item $pairFile (Join-Path $destDir "$safe.txt") -Force
+
+    # Parse key:value lines
+    $kv = @{}
+    Get-Content $pairFile | ForEach-Object {
+      if ($_ -match '^\s*([^:]+)\s*:\s*(.*)\s*$') { $kv[$matches[1]] = $matches[2] }
+    }
+
+    $trades = $kv['trades']
+    $profit_total = $kv['profit_total']
+    $profit_total_abs = $kv['profit_total_abs']
+    $sharpe = $kv['sharpe']
+
+    "$pair,$trades,$profit_total,$profit_total_abs,$sharpe,$runId" | Out-File -Append -Encoding utf8 $summaryCsv
+    Write-Host "Saved metrics for $pair -> $destDir\$safe.txt and appended to summary."
+  } else {
+    Write-Warning "Metrics file not found for $pair (expected $pairFile)."
+  }
+
+  Write-Host ">>> Finished $pair`n"
+}
+
+
+/////////////////////////////////////
+scripts\build_pairs.ps1
+

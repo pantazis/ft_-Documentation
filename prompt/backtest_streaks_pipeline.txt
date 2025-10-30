@@ -1,0 +1,33 @@
+get data form 
+user_data/backtest_results/.last_result.json
+{"latest_backtest": "backtest-result-2025-10-14_10-51-45.zip"}
+user_data/backtest_results/backtest-result-2025-10-14_10-51-45.zip
+
+get candles from 
+user_data\data\binance
+
+from Equity Curve if hiest hi to lowest low = losing stric 
+flowest low to hi = winingw stirc 
+
+crate new array form backtest data and candles data wich insde sows thw winig and losing trades with flag inside array  losing strek
+and wining strek
+
+array soud also have tha backtest winin and losing tardes 
+
+ema_slope	
+don_pos	W	
+atr_norm	
+rsi	W	
+adx	W	
+don_width	
+ema_dist	
+vol_z	W	
+holding_s	
+hour	W	
+weekday	W	
+weekday
+using 
+
+using hiper opt find wich indicators predict losing street without affecting winistriks and win kount
+and after wich 2 o 3 indiketor cobine predict drowdown without efctin wining
+
