@@ -1,10 +1,10 @@
 docker-compose run --rm freqtrade hyperopt-show --best -n -1 --print-json --logfile user_data/logs/best.log
 
 
- docker-compose run --rm freqtrade hyperopt --strategy EmaSlopeOnly_pairconfig  --spaces   buy sell   --epochs 1000  --timerange 20250504- --hyperopt-loss DailyProfitSharpeR2EvenLoss  -j 1      --logfile user_data/logs/hiperopt.log
+ docker-compose run --rm freqtrade hyperopt --strategy SwingPivotTrailStrategy  --spaces   buy   --epochs 1000  --timerange  20251101-- --hyperopt-loss ProfitSharpeOnlyLoss  -j 1      --logfile user_data/logs/hiperopt.log
 
 
- docker-compose run --rm freqtrade backtesting --strategy EmaSlopeOnly_pairconfig --timerange  20250504-20251024 --logfile user_data/logs/backtest.log
+ docker-compose run --rm freqtrade backtesting --strategy SwingPivotTrailStrategy --timerange  20251101- --logfile user_data/logs/backtest.log
 
 
   C:/Users/pvast/Documents/freqtrade/ft_userdata/.venv/Scripts/python.exe user_data/documentation/ft_backtest_charts.py --use-last --results-dir user_data/backtest_results --outdir user_data/plot/charts_last
